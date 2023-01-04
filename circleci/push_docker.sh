@@ -11,12 +11,17 @@
 #       bash push_docker.sh
 #
 
+
 if [[ -n "$DOCKER_PASS" ]]; then
 
     # make sure we have a lowercase repo name
     repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')
 
-    echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+    if [[ -n "${DOCKER_EMAIL}" ]]; then
+        echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" -e "${DOCKER_EMAIL}" --password-stdin
+    else
+        echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
+    fi
 
     echo "Pushing to DockerHub bids/${repo_name}:unstable"
     docker tag "bids/${repo_name}" "bids/${repo_name}:unstable"

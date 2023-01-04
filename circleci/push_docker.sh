@@ -1,15 +1,15 @@
 #! /bin/bash
 
 # used to push the Docker image for a project in circle CI
-# 
+#
 # USAGE:
-# 
+#
 # - run:
 #     name: push docker image
 #     command: |
 #       wget https://raw.githubusercontent.com/bids-apps/maintenance-tools/main/circleci/push_docker.sh
-#       bash push_docker.sh  
-#  
+#       bash push_docker.sh
+#
 
 if [[ -n "$DOCKER_PASS" ]]; then
 

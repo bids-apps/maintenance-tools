@@ -18,3 +18,4 @@ git describe --tags --always > version
 docker build -t "bids/${CIRCLE_PROJECT_REPONAME,,}" .
 mkdir -p "${HOME}/docker"
 docker save "bids/${CIRCLE_PROJECT_REPONAME,,}" > "${HOME}/docker/image.tar"
+docker images

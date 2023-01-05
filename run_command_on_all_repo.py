@@ -21,17 +21,21 @@ from subprocess import run
 
 from rich import print
 
-cmd = "git shortlog -sne --all"
-
 # git shortlog -sne --all
+cmd = "git diff"
 
 DRY_RUN = False
-VERBOSE = False
+
+VERBOSE = True
 
 OUTPUT_FILE = Path(__file__).parent / "output.md"
+OUTPUT_FILE = None
 
 
-# print_to_output(output_file, f"{result.stdout}")
+class DummyResult:
+    def __init__(self, stdout="dummy output", stderr=None):
+        self.stdout = stdout
+        self.stderr = stderr
 
 
 def run_cmd(cmd, dry_run=True, verbose=True, split=True):
@@ -43,7 +47,7 @@ def run_cmd(cmd, dry_run=True, verbose=True, split=True):
         print(f"[green]{' '.join(cmd)}[/green]")
 
     if dry_run:
-        return True
+        return DummyResult()
 
     result = run(cmd, capture_output=True, text=True)
 

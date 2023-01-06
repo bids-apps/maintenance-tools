@@ -25,7 +25,7 @@
         "fmriprep": "https://github.com/bids-apps/fmriprep.git",
         "freesurfer": "https://github.com/bids-apps/freesurfer.git",
         "hyperalignment": "https://github.com/bids-apps/hyperalignment.git",
-        "io": "https://github.com/bids-apps/bids-apps.github.io.git",
+        "bids-apps.github.io": "https://github.com/bids-apps/bids-apps.github.io.git",
         "matlab-compiler-runtime": "https://github.com/bids-apps/matlab-compiler-runtime.git",
         "mindboggle": "https://github.com/bids-apps/mindboggle.git",
         "mriqc": "https://github.com/bids-apps/mriqc.git",

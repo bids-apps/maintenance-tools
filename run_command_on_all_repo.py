@@ -13,7 +13,7 @@ This can be done with the following command:
     xargs -L1 git clone
 
 Then run this script from within the maintenance-tools repo.
-The script will apply the command to all the repos in the same directory that it is in.
+The script will apply the command to all the repos in `START_DIR`.
 """
 import os
 from pathlib import Path
@@ -22,7 +22,7 @@ from subprocess import run
 from rich import print
 
 # git shortlog -sne --all
-cmd = "git diff"
+cmd = "git log --oneline"
 
 DRY_RUN = False
 
@@ -30,6 +30,8 @@ VERBOSE = True
 
 OUTPUT_FILE = Path(__file__).parent / "output.md"
 OUTPUT_FILE = None
+
+START_DIR = Path(__file__).parent.joinpath("output")
 
 
 class DummyResult:
@@ -68,13 +70,16 @@ def print_to_output(output_file, text):
 
 def main():
 
-    start_dir = Path(__file__).parent
-
     if OUTPUT_FILE is not None:
         with open(OUTPUT_FILE, "w") as log:
             print(f"# Output from '{cmd}'\n", file=log)
 
-    for repo in start_dir.parent.iterdir():
+    print(f"Appying to folders in: {START_DIR}")
+
+    for repo in START_DIR.iterdir():
+
+        if repo.is_file():
+            continue
 
         if repo.name in [
             ".github",
@@ -100,7 +105,7 @@ def main():
         print_to_output(output_file=OUTPUT_FILE, text=result.stdout)
         print_to_output(output_file=OUTPUT_FILE, text="```\n")
 
-    os.chdir(start_dir)
+    os.chdir(START_DIR)
 
 
 if __name__ == "__main__":

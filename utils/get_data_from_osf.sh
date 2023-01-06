@@ -21,28 +21,15 @@ dry_run=false
 
 dataset=$1
 
-all_datasets=("ds114_test1 ds114_test2 ds114_test1_freesurfer ds114_test2_freesurfer ds005-deriv-light ds114_test1_freesurfer_precomp_v6.0.0 ds114_test2_freesurfer_precomp_v6.0.0 hcp_example_bids_v3 lifespan_example_bids_v3 ds003_downsampled ds114_test1_with_freesurfer")
 tar_datasets=("ds114_test1 ds114_test2 ds114_test1_freesurfer ds114_test2_freesurfer ds005-deriv-light ds114_test1_freesurfer_precomp_v6.0.0 ds114_test2_freesurfer_precomp_v6.0.0 ds003_downsampled")
-tar_gz_datasets=("ds114_test1_with_freesurfer ")
+tar_gz_datasets=("ds114_test1_with_freesurfer ds114_test1_with_freesurfer_and_fsaverage")
 zip_datasets=("hcp_example_bids_v3 lifespan_example_bids_v3")
-
-if [[ ! " ${all_datasets[*]} " =~  ${dataset} ]]; then
-  # whatever you want to do when array doesn't contain value
-  echo "first argument must be one of:"
-  for i in ${all_datasets}; do
-    printf " - %s\n" "${i}"
-  done
-  echo "got ${dataset}"
-  exit 1
-fi
 
 if [[ " ${tar_datasets[*]} " =~ ${dataset} ]]; then
   extension="tar"
-fi
-if [[ " ${zip_datasets[*]} " =~ ${dataset} ]]; then
+elif [[ " ${zip_datasets[*]} " =~ ${dataset} ]]; then
   extension="zip"
-fi
-if [[ " ${tar_gz_datasets[*]} " =~ ${dataset} ]]; then
+elif [[ " ${tar_gz_datasets[*]} " =~ ${dataset} ]]; then
   extension="tar.gz"
 fi
 
@@ -68,12 +55,21 @@ elif [ "${dataset}" = "ds003_downsampled" ]; then
   ds_download_prefix="8s29u"
 elif [ "${dataset}" = "ds114_test1_with_freesurfer" ]; then
   ds_download_prefix="y4q8a"
+elif [ "${dataset}" = "ds114_test1_with_freesurfer_and_fsaverage" ]; then
+  ds_download_prefix="nz3af"
+else
+  : "UNKNOWN DATASET: first argument must be one of the following"
+  : "-" "${tar_datasets[@]}"
+  : "-" "${tar_gz_datasets[@]}"
+  : "-" "${zip_datasets[@]}"
+  : "got ${dataset}"
+  exit 1
 fi
 
 mkdir -p "${HOME}/data"
 if [[ ! -d "${HOME}/data/${dataset}" ]]; then
 
-  echo "Downloading ${dataset}.${extension} from https://osf.io/download/${ds_download_prefix}"
+  : "Downloading ${dataset}.${extension} from https://osf.io/download/${ds_download_prefix}"
 
   if [ "${dry_run}" = false ]; then
 
@@ -97,5 +93,5 @@ if [[ ! -d "${HOME}/data/${dataset}" ]]; then
   fi
 
 else
-  echo "Dataset ${dataset} was cached"
+  : "Dataset ${dataset} was cached"
 fi

@@ -2,8 +2,9 @@
     "output_dir": "output",
     "source": "all_repos.source.json_file",
     "source_settings": {
-        "filename": "repo_list.json"
+        "filename": "all_repo_list.json"
     },
-    "push": "all_repos.push.readonly",
-    "push_settings":  {}
+    "push": "all_repos.push.merge_to_master",
+    "push_settings": {"fast_forward": true},
+    "exclude": "^fmriprep|mriqc|rsHRF|PyMVPA|bids-apps$"
 }

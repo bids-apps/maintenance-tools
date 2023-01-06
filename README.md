@@ -10,11 +10,24 @@ pip install all-repos
 
 ### other commands
 
-- all-repos-find-files
 - all-repos-grep
+
+```bash
+all-repos-grep ':image' -- .circleci/config.yml
+```
+
+- all-repos-sed
+
+```bash
+all-repos-sed \
+    "s@image: circleci/buildpack-deps:stretch@image: ubuntu-2204:2022.10.2@g" \
+    .circleci/config.yml \
+    --commit-msg "use ubuntu image"
+```
+
+- all-repos-find-files
 - all-repos-list-repos
 - all-repos-manual
-- all-repos-sed
 
 ### Cloning all the repos
 

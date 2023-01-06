@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -eux -o pipefail
+
 # used to build the Docker image for a project in circle CI
 #
 #  assumes that the docker has been cached in ${HOME}/docker/image.tar

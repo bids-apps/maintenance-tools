@@ -4,7 +4,7 @@
     "source_settings": {
         "filename": "all_repo_list.json"
     },
-    "push": "all_repos.push.merge_to_master",
+    "push": "all_repos.push.readonly",
     "push_settings": {"fast_forward": true},
     "exclude": "^fmriprep|mriqc|rsHRF|PyMVPA|bids-apps|MRtrix3_connectome$"
 }

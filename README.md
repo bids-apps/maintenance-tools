@@ -43,7 +43,9 @@ Currently, the config file is set to no to anything on the repo
 "push": "all_repos.push.readonly",
 ```
 
-See the all-repos doc to see how to change this.
+Change this setting to `all_repos.push.merge_to_master` to push to the default branch.
+
+See the all-repos doc to see other push options.
 
 You can filter the repos to clone by adding a `include` or `exclude` key to the
 `all-repos.json` file.

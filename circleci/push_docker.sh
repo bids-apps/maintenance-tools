@@ -37,5 +37,5 @@ if [[ -n "$DOCKER_PASS" ]]; then
 
 else
     : "No DOCKER_PASS, skipping push to DockerHub"
-
+    exit 1
 fi

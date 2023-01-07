@@ -22,7 +22,7 @@ from subprocess import run
 from rich import print
 
 # git shortlog -sne --all
-cmd = "git log --oneline"
+COMMANDS = ["git add -A", "git commit -m 'precommit'", "git push"]
 
 DRY_RUN = False
 
@@ -72,7 +72,7 @@ def main():
 
     if OUTPUT_FILE is not None:
         with open(OUTPUT_FILE, "w") as log:
-            print(f"# Output from '{cmd}'\n", file=log)
+            print(f"# Output from '{COMMANDS}'\n", file=log)
 
     print(f"Appying to folders in: {START_DIR}")
 
@@ -100,10 +100,11 @@ def main():
             output_file=OUTPUT_FILE, text=rf"## \[{repo.name}]({result.stdout[:-1]})"
         )
 
-        result = run_cmd(cmd, verbose=VERBOSE, dry_run=DRY_RUN)
-        print_to_output(output_file=OUTPUT_FILE, text="\n```")
-        print_to_output(output_file=OUTPUT_FILE, text=result.stdout)
-        print_to_output(output_file=OUTPUT_FILE, text="```\n")
+        for cmd in COMMANDS:
+            result = run_cmd(cmd, verbose=VERBOSE, dry_run=DRY_RUN)
+            print_to_output(output_file=OUTPUT_FILE, text="\n```")
+            print_to_output(output_file=OUTPUT_FILE, text=result.stdout)
+            print_to_output(output_file=OUTPUT_FILE, text="```\n")
 
     os.chdir(START_DIR)
 

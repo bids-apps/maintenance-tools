@@ -10,13 +10,13 @@ pip install all-repos
 
 ### other commands
 
-- all-repos-grep
+- `all-repos-grep`
 
 ```bash
 all-repos-grep ':image' -- .circleci/config.yml
 ```
 
-- all-repos-sed
+- `all-repos-sed`
 
 ```bash
 all-repos-sed \
@@ -25,9 +25,9 @@ all-repos-sed \
     --commit-msg "use ubuntu image"
 ```
 
-- all-repos-find-files
-- all-repos-list-repos
-- all-repos-manual
+- `all-repos-find-files`
+- `all-repos-list-repos`
+- `all-repos-manual`
 
 ### Cloning all the repos
 

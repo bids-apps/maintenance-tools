@@ -1,6 +1,6 @@
 #! /bin/bash
 
-set -eux -o pipefail
+set -ex -o pipefail
 
 # used to push the Docker image for a project in circle CI
 #
@@ -14,7 +14,7 @@ set -eux -o pipefail
 #
 
 
-if [[ -n "$DOCKER_TOKEN" ]]; then
+if [[ -n "${DOCKER_TOKEN}" ]]; then
 
     # make sure we have a lowercase repo name
     repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')

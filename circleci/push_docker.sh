@@ -14,7 +14,7 @@ set -eux -o pipefail
 #
 
 
-if [[ -n "$DOCKER_PASS" ]]; then
+if [[ -n "$DOCKER_TOKEN" ]]; then
 
     # make sure we have a lowercase repo name
     repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')
@@ -36,6 +36,6 @@ if [[ -n "$DOCKER_PASS" ]]; then
     fi
 
 else
-    : "No DOCKER_PASS, skipping push to DockerHub"
+    : "No DOCKER_TOKEN, skipping push to DockerHub"
     exit 1
 fi

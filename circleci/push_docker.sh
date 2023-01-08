@@ -16,21 +16,24 @@ set -ex -o pipefail
 
 if [[ -n "${DOCKER_TOKEN}" ]]; then
 
-    # make sure we have a lowercase repo name
+    # make sure we have a lowercase repo
+    user_name=$(echo "${CIRCLE_PROJECT_USERNAME}" | tr '[:upper:]' '[:lower:]')
     repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')
+
+    ${user_name}
 
     if [[ -n "${DOCKER_TOKEN}" ]]; then
         echo "${DOCKER_TOKEN}" | docker login -u "${DOCKER_USER}" --password-stdin
 
         : "Pushing to DockerHub bids/${repo_name}:unstable"
-        docker tag "bids/${repo_name}" "bids/${repo_name}:unstable"
-        docker push "bids/${repo_name}:unstable"
+        docker tag "${user_name}/${repo_name}" "${user_name}/${repo_name}:unstable"
+        docker push "${user_name}/${repo_name}:unstable"
 
         if [[ -n "${CIRCLE_TAG}" ]]; then
             : "Pushing to DockerHub bids/${repo_name}:${CIRCLE_TAG}"
-            docker push "bids/${repo_name}:latest"
-            docker tag "bids/${repo_name}" "bids/${repo_name}:${CIRCLE_TAG}"
-            docker push "bids/${repo_name}:${CIRCLE_TAG}"
+            docker push "${user_name}/${repo_name}:latest"
+            docker tag "${user_name}/${repo_name}" "bids/${repo_name}:${CIRCLE_TAG}"
+            docker push "${user_name}/${repo_name}:${CIRCLE_TAG}"
         fi
 
     fi

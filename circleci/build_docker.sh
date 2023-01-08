@@ -13,11 +13,15 @@ set -eux -o pipefail
 #     - ~/data
 #
 
+# make sure we have a lowercase repo
+user_name=$(echo "${CIRCLE_PROJECT_USERNAME}" | tr '[:upper:]' '[:lower:]')
+repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')
+
 if [[ -e "${HOME}/docker/image.tar" ]]; then
     docker load -i "${HOME}/docker/image.tar"
 fi
 git describe --tags --always > version
-docker build -t "bids/${CIRCLE_PROJECT_REPONAME,,}" .
+docker build -t "${user_name}/${repo_name}" .
 mkdir -p "${HOME}/docker"
-docker save "bids/${CIRCLE_PROJECT_REPONAME,,}" > "${HOME}/docker/image.tar"
+docker save "${user_name}/${repo_name}" > "${HOME}/docker/image.tar"
 docker images

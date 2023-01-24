@@ -20,8 +20,6 @@ if [[ -n "${DOCKER_TOKEN}" ]]; then
     user_name="bids"
     repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')
 
-    ${user_name}
-
     if [[ -n "${DOCKER_TOKEN}" ]]; then
         echo "${DOCKER_TOKEN}" | docker login -u "${DOCKER_USER}" --password-stdin
 

@@ -17,7 +17,7 @@ set -ex -o pipefail
 if [[ -n "${DOCKER_TOKEN}" ]]; then
 
     # make sure we have a lowercase repo
-    user_name=$(echo "${CIRCLE_PROJECT_USERNAME}" | tr '[:upper:]' '[:lower:]')
+    user_name="bids"
     repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')
 
     ${user_name}

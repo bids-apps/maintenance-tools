@@ -14,7 +14,7 @@ set -eux -o pipefail
 #
 
 # make sure we have a lowercase repo
-user_name=$(echo "${CIRCLE_PROJECT_USERNAME}" | tr '[:upper:]' '[:lower:]')
+user_name="bids"
 repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')
 
 if [[ -e "${HOME}/docker/image.tar" ]]; then

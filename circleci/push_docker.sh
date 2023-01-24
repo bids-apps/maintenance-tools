@@ -23,14 +23,14 @@ if [[ -n "${DOCKER_TOKEN}" ]]; then
     if [[ -n "${DOCKER_TOKEN}" ]]; then
         echo "${DOCKER_TOKEN}" | docker login -u "${DOCKER_USER}" --password-stdin
 
-        : "Pushing to DockerHub bids/${repo_name}:unstable"
+        : "Pushing to DockerHub ${user_name}/${repo_name}:unstable"
         docker tag "${user_name}/${repo_name}" "${user_name}/${repo_name}:unstable"
         docker push "${user_name}/${repo_name}:unstable"
 
         if [[ -n "${CIRCLE_TAG}" ]]; then
-            : "Pushing to DockerHub bids/${repo_name}:${CIRCLE_TAG}"
+            : "Pushing to DockerHub ${user_name}/${repo_name}:${CIRCLE_TAG}"
             docker push "${user_name}/${repo_name}:latest"
-            docker tag "${user_name}/${repo_name}" "bids/${repo_name}:${CIRCLE_TAG}"
+            docker tag "${user_name}/${repo_name}" "${user_name}/${repo_name}:${CIRCLE_TAG}"
             docker push "${user_name}/${repo_name}:${CIRCLE_TAG}"
         fi
 

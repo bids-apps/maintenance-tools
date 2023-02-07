@@ -41,7 +41,6 @@ class DummyResult:
 
 
 def run_cmd(cmd, dry_run=True, verbose=True, split=True):
-
     if split:
         cmd = cmd.split()
 
@@ -69,7 +68,6 @@ def print_to_output(output_file, text):
 
 
 def main():
-
     if OUTPUT_FILE is not None:
         with open(OUTPUT_FILE, "w") as log:
             print(f"# Output from '{COMMANDS}'\n", file=log)
@@ -77,7 +75,6 @@ def main():
     print(f"Appying to folders in: {START_DIR}")
 
     for repo in START_DIR.iterdir():
-
         if repo.is_file():
             continue
 

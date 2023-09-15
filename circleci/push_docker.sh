@@ -20,20 +20,17 @@ if [[ -n "${DOCKER_TOKEN}" ]]; then
     user_name="bids"
     repo_name=$(echo "${CIRCLE_PROJECT_REPONAME}" | tr '[:upper:]' '[:lower:]')
 
-    if [[ -n "${DOCKER_TOKEN}" ]]; then
-        echo "${DOCKER_TOKEN}" | docker login -u "${DOCKER_USER}" --password-stdin
+    echo "${DOCKER_TOKEN}" | docker login -u "${DOCKER_USER}" --password-stdin
 
-        : "Pushing to DockerHub ${user_name}/${repo_name}:unstable"
-        docker tag "${user_name}/${repo_name}" "${user_name}/${repo_name}:unstable"
-        docker push "${user_name}/${repo_name}:unstable"
+    : "Pushing to DockerHub ${user_name}/${repo_name}:unstable"
+    docker tag "${user_name}/${repo_name}" "${user_name}/${repo_name}:unstable"
+    docker push "${user_name}/${repo_name}:unstable"
 
-        if [[ -n "${CIRCLE_TAG}" ]]; then
-            : "Pushing to DockerHub ${user_name}/${repo_name}:${CIRCLE_TAG}"
-            docker push "${user_name}/${repo_name}:latest"
-            docker tag "${user_name}/${repo_name}" "${user_name}/${repo_name}:${CIRCLE_TAG}"
-            docker push "${user_name}/${repo_name}:${CIRCLE_TAG}"
-        fi
-
+    if [[ -n "${CIRCLE_TAG}" ]]; then
+        : "Pushing to DockerHub ${user_name}/${repo_name}:${CIRCLE_TAG}"
+        docker push "${user_name}/${repo_name}:latest"
+        docker tag "${user_name}/${repo_name}" "${user_name}/${repo_name}:${CIRCLE_TAG}"
+        docker push "${user_name}/${repo_name}:${CIRCLE_TAG}"
     fi
 
 else

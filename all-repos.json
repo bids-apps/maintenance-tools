@@ -6,5 +6,5 @@
     },
     "push": "all_repos.push.merge_to_master",
     "push_settings": {"fast_forward": true},
-    "exclude": "^fmriprep|mriqc$"
+    "exclude": "^fmriprep|mriqc|PyMVPA|MRtrix3_connectome$"
 }

@@ -15,6 +15,7 @@ This can be done with the following command:
 Then run this script from within the maintenance-tools repo.
 The script will apply the command to all the repos in `START_DIR`.
 """
+
 import os
 from pathlib import Path
 from subprocess import run

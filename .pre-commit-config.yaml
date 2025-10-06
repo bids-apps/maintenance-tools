@@ -32,7 +32,7 @@ repos:
     types: [dockerfile]
     entry: ghcr.io/hadolint/hadolint hadolint
 
-- repo: https://github.com/psf/black
+- repo: https://github.com/psf/black-pre-commit-mirror
   rev: 25.9.0
   hooks:
   - id: black
@@ -49,7 +49,7 @@ repos:
   - id: flake8
 
 - repo: https://github.com/pycqa/isort
-  rev: 6.0.1
+  rev: 6.1.0
   hooks:
   - id: isort
 

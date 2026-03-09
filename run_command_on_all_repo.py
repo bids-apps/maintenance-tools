@@ -1,4 +1,4 @@
-"""Script to run a command on all bids app repositories.
+r"""Script to run a command on all bids app repositories.
 
 Assumes that you have cloned all the repositories in the same directory.
 
@@ -42,6 +42,7 @@ class DummyResult:
 
 
 def run_cmd(cmd, dry_run=True, verbose=True, split=True):
+    """Run a given command."""
     if split:
         cmd = cmd.split()
 
@@ -60,6 +61,7 @@ def run_cmd(cmd, dry_run=True, verbose=True, split=True):
 
 
 def print_to_output(output_file, text):
+    """Print to file or stdout."""
     if output_file is not None:
         with open(output_file, "a") as f:
             print(f"{text}", file=f)
@@ -69,6 +71,7 @@ def print_to_output(output_file, text):
 
 
 def main():
+    """Run main function."""
     if OUTPUT_FILE is not None:
         with open(OUTPUT_FILE, "w") as log:
             print(f"# Output from '{COMMANDS}'\n", file=log)
@@ -89,14 +92,10 @@ def main():
 
         os.chdir(repo)
 
-        result = run_cmd(
-            "git config --get remote.origin.url", verbose=False, dry_run=False
-        )
+        result = run_cmd("git config --get remote.origin.url", verbose=False, dry_run=False)
         print(f"\n[blue]{repo.name}[/blue]")
         print(f"[blue]{result.stdout}[/blue]")
-        print_to_output(
-            output_file=OUTPUT_FILE, text=rf"## \[{repo.name}]({result.stdout[:-1]})"
-        )
+        print_to_output(output_file=OUTPUT_FILE, text=rf"## \[{repo.name}]({result.stdout[:-1]})")
 
         for cmd in COMMANDS:
             result = run_cmd(cmd, verbose=VERBOSE, dry_run=DRY_RUN)

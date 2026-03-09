@@ -39,23 +39,12 @@ repos:
     types: [dockerfile]
     entry: ghcr.io/hadolint/hadolint hadolint
 
-- repo: https://github.com/psf/black-pre-commit-mirror
-  rev: 26.1.0
+    # Lint and format Python code
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.15.4
   hooks:
-  - id: black
-
-- repo: https://github.com/asottile/pyupgrade
-  rev: v3.21.2
-  hooks:
-  - id: pyupgrade
-    args: [--py38-plus]
-
-- repo: https://github.com/pycqa/flake8
-  rev: 7.3.0
-  hooks:
-  - id: flake8
-
-- repo: https://github.com/pycqa/isort
-  rev: 8.0.1
-  hooks:
-  - id: isort
+  - id: ruff-check
+        # args: [--statistics]
+    args: [--fix, --show-fixes, --unsafe-fixes]
+  - id: ruff-format
+        # args: [--diff]

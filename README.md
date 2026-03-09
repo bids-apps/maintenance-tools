@@ -37,7 +37,7 @@ all-repos-clone -C all-repos.json
 
 ### Configuration
 
-Currently, the config file is set to no to anything on the repo
+Currently, the config file is set to not do anything on the repo
 
 ```json
 "push": "all_repos.push.readonly",

@@ -20,10 +20,11 @@ import os
 from pathlib import Path
 from subprocess import run
 
+import yaml
 from rich import print
 
 # git shortlog -sne --all
-COMMANDS = ["git add -A", "git commit -m 'precommit'", "git push"]
+COMMANDS = ["git add -A", "git commit -m 'precommit-CI-config'", "git push"]
 
 DRY_RUN = False
 
@@ -97,6 +98,8 @@ def main():
         print(f"[blue]{result.stdout}[/blue]")
         print_to_output(output_file=OUTPUT_FILE, text=rf"## \[{repo.name}]({result.stdout[:-1]})")
 
+        do_on_repo(repo)
+
         for cmd in COMMANDS:
             result = run_cmd(cmd, verbose=VERBOSE, dry_run=DRY_RUN)
             print_to_output(output_file=OUTPUT_FILE, text="\n```")
@@ -104,6 +107,34 @@ def main():
             print_to_output(output_file=OUTPUT_FILE, text="```\n")
 
     os.chdir(START_DIR)
+
+
+def update_pre_commit_ci(filepath: Path) -> None:
+    """Update pre-commit config."""
+    with open(filepath) as f:
+        config = yaml.safe_load(f) or {}
+
+    config["ci"] = {
+        "autoupdate_commit_msg": "chore: update pre-commit hooks",
+        "autoupdate_schedule": "monthly",
+        "autofix_commit_msg": "style: pre-commit fixes",
+        "autofix_prs": False,
+        "skip": ["hadolint-docker"],
+    }
+
+    with open(filepath, "w") as f:
+        yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+
+    print_to_output(output_file=OUTPUT_FILE, text="pre_commit config modified")
+
+
+def do_on_repo(repo) -> bool:
+    """Do something on that repo."""
+    filepath = START_DIR / repo.name / ".pre-commit-config.yaml"
+    if filepath.exists():
+        update_pre_commit_ci(filepath)
+        return True
+    return False
 
 
 if __name__ == "__main__":

@@ -3,6 +3,8 @@
         "BROCCOLI": "https://github.com/bids-apps/BROCCOLI.git",
         "BrainSuite": "https://github.com/bids-apps/BrainSuite.git",
         "CPAC": "https://github.com/bids-apps/CPAC.git",
+        "cat12": "https://github.com/bids-apps/cat12.git",
+        "giga_connectome": "https://github.com/bids-apps/giga_connectome.git",
         "DPARSF": "https://github.com/bids-apps/DPARSF.git",
         "FibreDensityAndCrosssection": "https://github.com/bids-apps/FibreDensityAndCrosssection.git",
         "HCPPipelines": "https://github.com/bids-apps/HCPPipelines.git",

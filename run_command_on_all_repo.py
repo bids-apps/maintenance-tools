@@ -24,7 +24,7 @@ import yaml
 from rich import print
 
 # git shortlog -sne --all
-COMMANDS = ["git add -A", "git commit -m 'precommit-CI-config'", "git push"]
+COMMANDS = ["git add -A", "git commit -m 'precommit-fix'", "git push"]
 
 DRY_RUN = False
 
@@ -100,7 +100,12 @@ def main():
 
         do_on_repo(repo)
 
-        for cmd in COMMANDS:
+        commands_to_run = COMMANDS
+        pre_commit_config = START_DIR / repo.name / ".pre-commit-config.yaml"
+        if pre_commit_config.exists():
+            commands_to_run = ["pre-commit install", "pre-commit run -a", *COMMANDS]
+
+        for cmd in commands_to_run:
             result = run_cmd(cmd, verbose=VERBOSE, dry_run=DRY_RUN)
             print_to_output(output_file=OUTPUT_FILE, text="\n```")
             print_to_output(output_file=OUTPUT_FILE, text=result.stdout)
@@ -130,9 +135,9 @@ def update_pre_commit_ci(filepath: Path) -> None:
 
 def do_on_repo(repo) -> bool:
     """Do something on that repo."""
-    filepath = START_DIR / repo.name / ".pre-commit-config.yaml"
-    if filepath.exists():
-        update_pre_commit_ci(filepath)
+    pre_commit_config = START_DIR / repo.name / ".pre-commit-config.yaml"
+    if pre_commit_config.exists():
+        update_pre_commit_ci(pre_commit_config)
         return True
     return False
 

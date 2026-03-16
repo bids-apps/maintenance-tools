@@ -24,14 +24,20 @@ import yaml
 from rich import print
 
 # git shortlog -sne --all
-COMMANDS = ["git add -A", "git commit -m 'precommit-fix'", "git push"]
+COMMANDS = [
+    "git add -A",
+    "git commit -m 'set-dependabot-semiannually'",
+    "git add -A",
+    "git commit -m 'set-dependabot-semiannually'",
+    "git push",
+]
 
 DRY_RUN = False
 
 VERBOSE = True
 
 OUTPUT_FILE = Path(__file__).parent / "output.md"
-OUTPUT_FILE = None
+# OUTPUT_FILE = None
 
 START_DIR = Path(__file__).parent.joinpath("output")
 
@@ -93,53 +99,70 @@ def main():
 
         os.chdir(repo)
 
-        result = run_cmd("git config --get remote.origin.url", verbose=False, dry_run=False)
-        print(f"\n[blue]{repo.name}[/blue]")
-        print(f"[blue]{result.stdout}[/blue]")
-        print_to_output(output_file=OUTPUT_FILE, text=rf"## \[{repo.name}]({result.stdout[:-1]})")
+        commands_to_run = []
+        if do_on_repo(repo):
+            print(f"\n[blue]{repo.name}[/blue]")
 
-        do_on_repo(repo)
+            result = run_cmd("git config --get remote.origin.url", verbose=False, dry_run=False)
+            print_to_output(
+                output_file=OUTPUT_FILE, text=rf"## \[{repo.name}]({result.stdout[:-1]})"
+            )
+            print(f"[blue]{result.stdout}[/blue]")
 
-        commands_to_run = COMMANDS
-        pre_commit_config = START_DIR / repo.name / ".pre-commit-config.yaml"
-        if pre_commit_config.exists():
-            commands_to_run = ["pre-commit install", "pre-commit run -a", *COMMANDS]
+            commands_to_run = COMMANDS
+            pre_commit_config = START_DIR / repo.name / ".pre-commit-config.yaml"
+            if pre_commit_config.exists():
+                commands_to_run = ["pre-commit install", "pre-commit run -a", *COMMANDS]
 
-        for cmd in commands_to_run:
-            result = run_cmd(cmd, verbose=VERBOSE, dry_run=DRY_RUN)
-            print_to_output(output_file=OUTPUT_FILE, text="\n```")
-            print_to_output(output_file=OUTPUT_FILE, text=result.stdout)
-            print_to_output(output_file=OUTPUT_FILE, text="```\n")
+            for cmd in commands_to_run:
+                result = run_cmd(cmd, verbose=VERBOSE, dry_run=DRY_RUN)
+                print_to_output(output_file=OUTPUT_FILE, text="\n```")
+                print_to_output(output_file=OUTPUT_FILE, text=result.stdout)
+                print_to_output(output_file=OUTPUT_FILE, text="```\n")
 
     os.chdir(START_DIR)
 
 
-def update_pre_commit_ci(filepath: Path) -> None:
-    """Update pre-commit config."""
-    with open(filepath) as f:
-        config = yaml.safe_load(f) or {}
-
-    config["ci"] = {
-        "autoupdate_commit_msg": "chore: update pre-commit hooks",
-        "autoupdate_schedule": "monthly",
-        "autofix_commit_msg": "style: pre-commit fixes",
-        "autofix_prs": False,
-        "skip": ["hadolint-docker"],
-    }
-
-    with open(filepath, "w") as f:
-        yaml.dump(config, f, default_flow_style=False, sort_keys=False)
-
-    print_to_output(output_file=OUTPUT_FILE, text="pre_commit config modified")
-
-
 def do_on_repo(repo) -> bool:
     """Do something on that repo."""
-    pre_commit_config = START_DIR / repo.name / ".pre-commit-config.yaml"
-    if pre_commit_config.exists():
-        update_pre_commit_ci(pre_commit_config)
+    gh_folder = START_DIR / repo.name / ".github"
+    if gh_folder.exists():
+        update_dependabot(gh_folder)
         return True
+
     return False
+
+
+def update_dependabot(gh_folder: Path) -> None:
+    """Update pre-commit config."""
+    dependabot_cfg = gh_folder / "dependabot.yml"
+    if dependabot_cfg.exists():
+        with dependabot_cfg.open() as f:
+            config = yaml.safe_load(f)
+            print(config)
+
+        for i, x in enumerate(config["updates"]):
+            x["schedule"]["interval"] = "semiannually"
+            config["updates"][i] = x
+
+        with dependabot_cfg.open("w") as f:
+            yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+
+    else:
+        config = {
+            "version": 2,
+            "updates": [
+                {
+                    "package-ecosystem": "github-actions",
+                    "directory": "/",
+                    "schedule": {"interval": "semiannually"},
+                }
+            ],
+        }
+        with dependabot_cfg.open("w") as f:
+            yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+
+    print_to_output(output_file=OUTPUT_FILE, text="dependabot modified")
 
 
 if __name__ == "__main__":

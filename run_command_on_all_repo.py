@@ -37,7 +37,6 @@ DRY_RUN = False
 VERBOSE = True
 
 OUTPUT_FILE = Path(__file__).parent / "output.md"
-# OUTPUT_FILE = None
 
 START_DIR = Path(__file__).parent.joinpath("output")
 
